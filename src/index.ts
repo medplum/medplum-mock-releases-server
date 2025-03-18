@@ -23,7 +23,7 @@ interface AllReleasesResponse {
 
 // Constants
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 5001;
 const BASE_URL = process.env.BASE_URL || `http://localhost:${port}`;
 const RELEASES_DIR = path.join(__dirname, "../releases");
 

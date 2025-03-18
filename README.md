@@ -60,11 +60,11 @@ BASE_URL=https://releases.example.com npm start
 PORT=8080 BASE_URL=https://releases.example.com npm start
 ```
 
-The server runs on port 3000 by default. You can change this by setting the `PORT` environment variable.
+The server runs on port 5001 by default. You can change this by setting the `PORT` environment variable.
 
 ### Environment Variables
 
-- `PORT`: The port on which the server listens (default: 3000)
+- `PORT`: The port on which the server listens (default: 5001)
 - `BASE_URL`: The base URL used for constructing absolute URLs in the response (default: `http://localhost:{PORT}`)
   - Example: If `BASE_URL=https://releases.example.com`, download URLs will be `https://releases.example.com/releases/download/medplum-agent-installer-4.0.3.exe`
 
@@ -82,7 +82,7 @@ The server runs on port 3000 by default. You can change this by setting the `POR
         "assets": [
           {
             "name": "medplum-agent-installer-4.0.3.exe",
-            "browser_download_url": "http://localhost:3000/releases/download/medplum-agent-installer-4.0.3.exe"
+            "browser_download_url": "http://localhost:5001/releases/download/medplum-agent-installer-4.0.3.exe"
           }
         ]
       }
@@ -100,7 +100,7 @@ The server runs on port 3000 by default. You can change this by setting the `POR
     "assets": [
       {
         "name": "medplum-agent-installer-4.0.3.exe",
-        "browser_download_url": "http://localhost:3000/releases/download/medplum-agent-installer-4.0.3.exe"
+        "browser_download_url": "http://localhost:5001/releases/download/medplum-agent-installer-4.0.3.exe"
       }
     ]
   }
