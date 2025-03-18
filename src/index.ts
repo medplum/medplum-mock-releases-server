@@ -1,3 +1,4 @@
+import cors from "cors";
 import express, { type Request, type Response } from "express";
 import fs from "node:fs";
 import path from "node:path";
@@ -24,7 +25,9 @@ interface AllReleasesResponse {
 const app = express();
 const port = process.env.PORT || 3000;
 const BASE_URL = process.env.BASE_URL || `http://localhost:${port}`;
-const RELEASES_DIR = path.join(__dirname, "releases");
+const RELEASES_DIR = path.join(__dirname, "../releases");
+
+app.use(cors());
 
 // Ensure the releases directory exists
 if (!fs.existsSync(RELEASES_DIR)) {
