@@ -1,8 +1,7 @@
-import cors from "cors";
-import express, { type Request, type Response } from "express";
-import fs from "node:fs";
-import path from "node:path";
-import semver from "semver";
+import cors from 'cors';
+import express, { type Request, type Response } from 'express';
+import fs from 'node:fs';
+import path from 'node:path';
 
 // Interfaces
 interface Asset {
@@ -25,7 +24,7 @@ interface AllReleasesResponse {
 const app = express();
 const port = process.env.PORT || 5001;
 const BASE_URL = process.env.BASE_URL || `http://localhost:${port}`;
-const RELEASES_DIR = path.join(__dirname, "../releases");
+const RELEASES_DIR = path.join(__dirname, '../releases');
 
 app.use(cors());
 
@@ -36,7 +35,7 @@ if (!fs.existsSync(RELEASES_DIR)) {
 
 // Helper function to extract version from filename
 function extractVersion(filename: string): string | null {
-  const match = filename.match(/medplum-agent-installer-(\d+\.\d+\.\d+)\.exe/);
+  const match = filename.match(/medplum-agent-installer-((\d+)\.(\d+)\.(\d+)(?:-([a-zA-Z0-9]+))?)\.exe/);
   return match ? match[1] : null;
 }
 
@@ -67,8 +66,15 @@ function generateReleaseData(): Release[] {
 
   // Sort releases by semver (descending)
   releases.sort((a, b) => {
-    if (semver.gt(a.version, b.version)) return -1;
-    if (semver.lt(a.version, b.version)) return 1;
+    const aPublishedAt = new Date(a.published_at).getTime();
+    const bPublishedAt = new Date(b.published_at).getTime();
+
+    if (aPublishedAt > bPublishedAt) {
+      return -1;
+    }
+    if (aPublishedAt < bPublishedAt) {
+      return 1;
+    }
     return 0;
   });
 
@@ -76,30 +82,30 @@ function generateReleaseData(): Release[] {
 }
 
 // Endpoint for all.json
-app.get("/releases/all.json", (req: Request, res: Response) => {
+app.get('/releases/all.json', (req: Request, res: Response) => {
   const releases = generateReleaseData();
   const response: AllReleasesResponse = { versions: releases };
   res.json(response);
 });
 
 // Endpoint for latest.json
-app.get("/releases/latest.json", (req: Request, res: Response) => {
+app.get('/releases/latest.json', (req: Request, res: Response) => {
   const releases = generateReleaseData();
   if (releases.length > 0) {
     res.json(releases[0]); // First release is the latest (after sorting)
   } else {
-    res.status(404).json({ error: "No releases found" });
+    res.status(404).json({ error: 'No releases found' });
   }
 });
 
 // Serve static files from the releases directory
-app.get("/releases/download/:filename", (req: Request, res: Response) => {
+app.get('/releases/download/:filename', (req: Request, res: Response) => {
   const filePath = path.join(RELEASES_DIR, req.params.filename);
 
   if (fs.existsSync(filePath)) {
     res.download(filePath);
   } else {
-    res.status(404).json({ error: "File not found" });
+    res.status(404).json({ error: 'File not found' });
   }
 });
 
