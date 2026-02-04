@@ -98,6 +98,19 @@ app.get('/releases/latest.json', (req: Request, res: Response) => {
   }
 });
 
+// Endpoint for specific version: v{version}.json
+app.get('/releases/v:version.json', (req: Request, res: Response) => {
+  const requestedVersion = req.params.version;
+  const releases = generateReleaseData();
+  const release = releases.find((r) => r.version === requestedVersion);
+
+  if (release) {
+    res.json(release);
+  } else {
+    res.status(404).json({ error: `Version ${requestedVersion} not found` });
+  }
+});
+
 // Serve static files from the releases directory
 app.get('/releases/download/:filename', (req: Request, res: Response) => {
   const filePath = path.join(RELEASES_DIR, req.params.filename);
