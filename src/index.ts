@@ -57,7 +57,7 @@ function generateReleaseData(): Release[] {
         assets: [
           {
             name: file,
-            browser_download_url: `${BASE_URL}/releases/download/${file}`,
+            browser_download_url: new URL(`releases/download/${file}`, BASE_URL).toString(),
           },
         ],
       });
